@@ -59,7 +59,7 @@ jobs:
         run: |
           echo "✅ DUMMY EXECUTION MODE"
           echo "Would run: mvn clean test -Denv=$RUNNER_TYPE -Dcucumber.filter.Test=$EXECUTION_TYPE "
-          echo "module "Running Module: $Tags"
+          echo "Module: $Tags"
           echo "Simulating test run..."
           sleep 3
           echo "✅ Dummy Sanity Execution Completed Successfully"
