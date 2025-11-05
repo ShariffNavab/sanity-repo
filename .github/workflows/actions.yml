@@ -52,14 +52,11 @@ jobs:
           echo "Execution Type: $EXECUTION_TYPE"
           echo "Tags: $TAGS"
 
-      - uses: actions/checkout@v2
-
-
       - name: Build with Maven (Dummy Instead of Real Execution)
         run: |
           echo "✅ DUMMY EXECUTION MODE"
           echo "Would run: mvn clean test -Denv=$RUNNER_TYPE -Dcucumber.filter.Test=$EXECUTION_TYPE "
-          echo "Module: $Tags"
+          echo "Module: $TAGS"
           echo "Simulating test run..."
           sleep 3
           echo "✅ Dummy Sanity Execution Completed Successfully"
