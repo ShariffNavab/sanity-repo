@@ -33,7 +33,7 @@ on:
 
 jobs:
   build:
-    runs-on: testing-sanity
+    runs-on: ubuntu-latest
     timeout-minutes: 4320
     permissions:
       contents: read
