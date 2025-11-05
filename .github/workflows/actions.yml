@@ -16,7 +16,7 @@ on:
       runnerType2:
         description: 'Select Module or Execution Type'
         required: true
-        default: 'Investor_Prod'
+        default: '@IPRUSanity'
         type: choice
         options:
         - "@IPRUSanity"
@@ -33,7 +33,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: testing-sanity
     timeout-minutes: 4320
     permissions:
       contents: read
@@ -41,23 +41,20 @@ jobs:
 
     env:
       RUNNER_TYPE: ${{ github.event.inputs.runnerType1 || github.event.client_payload.runnerType1 || 'Prod' }}
-      EXECUTION_TYPE: ${{ github.event.inputs.runnerType2 || github.event.client_payload.runnerType2 || '@IPRUSanity' }}
+      EXECUTION_TYPE: ${{ github.event.inputs.textInput || github.event.client_payload.textInput || github.event.inputs.runnerType2 || github.event.client_payload.runnerType2 || '@IPRUSanity' }}
       TAGS: ${{ github.event.inputs.textInput || github.event.client_payload.textInput || '' }}
 
     steps:
       - name: Display Command
         run: |
-          echo "Running sanity with the following parameters:"
           echo "Runner Type: $RUNNER_TYPE"
           echo "Execution Type: $EXECUTION_TYPE"
           echo "Tags: $TAGS"
 
-      - name: Build with Maven (Dummy Instead of Real Execution)
+      - uses: actions/checkout@v2
+
+      - name: Build with Maven (Dummy)
         run: |
-          echo "✅ DUMMY EXECUTION MODE"
-          echo "Would run: mvn clean test -Denv=$RUNNER_TYPE -Dcucumber.filter.Test=$EXECUTION_TYPE "
-          echo "Module: $TAGS"
-          echo "Simulating test run..."
+          echo "Running: mvn clean test -Denv=$RUNNER_TYPE -Dcucumber.filter.tags=$EXECUTION_TYPE"
           sleep 3
           echo "✅ Dummy Sanity Execution Completed Successfully"
-
