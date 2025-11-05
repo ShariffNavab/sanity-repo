@@ -1,0 +1,65 @@
+name: InvestorSanity
+
+on:
+  workflow_dispatch:
+    inputs:
+      runnerType1:
+        description: 'Select the Environement'
+        required: true
+        default: 'Investor_Prod'
+        type: choice
+        options:
+        - UAT
+        - QA
+        - Prod
+
+      runnerType2:
+        description: 'Select Module or Execution Type'
+        required: true
+        default: 'Investor_Prod'
+        type: choice
+        options:
+        - "@IPRUSanity"
+        - "@regression"
+
+      textInput:
+        description: 'Enter Tags'
+        required: false
+        default: ''
+        type: string
+
+  repository_dispatch:
+    types: [trigger-qa-sanity]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4320
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      RUNNER_TYPE: ${{ github.event.inputs.runnerType1 || github.event.client_payload.runnerType1 || 'Prod' }}
+      EXECUTION_TYPE: ${{ github.event.inputs.runnerType2 || github.event.client_payload.runnerType2 || '@IPRUSanity' }}
+      TAGS: ${{ github.event.inputs.textInput || github.event.client_payload.textInput || '' }}
+
+    steps:
+      - name: Display Command
+        run: |
+          echo "Running sanity with the following parameters:"
+          echo "Runner Type: $RUNNER_TYPE"
+          echo "Execution Type: $EXECUTION_TYPE"
+          echo "Tags: $TAGS"
+
+      - uses: actions/checkout@v2
+
+
+      - name: Build with Maven (Dummy Instead of Real Execution)
+        run: |
+          echo "✅ DUMMY EXECUTION MODE"
+          echo "Would run: mvn clean test -Denv=$RUNNER_TYPE -Dcucumber.filter.tags=$EXECUTION_TYPE"
+          echo "Simulating test run..."
+          sleep 3
+          echo "✅ Dummy Sanity Execution Completed Successfully"
+
